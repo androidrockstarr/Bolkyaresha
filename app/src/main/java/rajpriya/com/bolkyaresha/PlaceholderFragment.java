@@ -3,6 +3,7 @@ package rajpriya.com.bolkyaresha;
 /**
  * Created by rajkumar on 27/11/14.
  */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +20,6 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 import com.google.gson.Gson;
 
@@ -158,63 +158,4 @@ public class PlaceholderFragment extends Fragment {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
-
-    private String buildUserInfoDisplay(GraphUser user) {
-        StringBuilder userInfo = new StringBuilder("");
-
-        // Example: typed access (name)
-        // - no special permissions required
-        userInfo.append(String.format("Name: %s\n\n",
-                user.getName()));
-
-        // Example: typed access (birthday)
-        // - requires user_birthday permission
-        userInfo.append(String.format("Birthday: %s\n\n",
-                user.getBirthday()));
-
-        // Example: partially typed access, to location field,
-        // name key (location)
-        // - requires user_location permission
-        userInfo.append(String.format("Location: %s\n\n",
-                user.getLocation().getProperty("name")));
-
-        // Example: access via property name (locale)
-        // - no special permissions required
-        userInfo.append(String.format("Locale: %s\n\n",
-                user.getProperty("locale")));
-
-        // Example: access via key for array (languages)
-        // - requires user_likes permission
-            /*JSONArray languages = (JSONArray)user.getProperty("languages");
-            if (languages.length() > 0) {
-                ArrayList<String> languageNames = new ArrayList<String>();
-                for (int i=0; i < languages.length(); i++) {
-                    JSONObject language = languages.optJSONObject(i);
-                    // Add the language name to a list. Use JSON
-                    // methods to get access to the name field.
-                    languageNames.add(language.optString("name"));
-                }
-                userInfo.append(String.format("Languages: %s\n\n",
-                        languageNames.toString()));
-            }*/
-
-        return userInfo.toString();
-    }
-
-    public void getPageFeed() {
-        /* make the API call */
-        new Request(
-                null,
-                "/Bolkyaresha/feed",
-                null,
-                HttpMethod.GET,
-                new Request.Callback() {
-                    public void onCompleted(Response response) {
-            /* handle the result */
-                    }
-                }
-        ).executeAsync();
-    }
-
-
 }
