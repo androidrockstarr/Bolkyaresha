@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -40,6 +42,7 @@ public class JokesAdapter extends BaseAdapter {
     private ArrayList<FBPagePost> mPosts = new ArrayList<FBPagePost>();
     private FBPagePaging mCurrentPaging;
     private boolean isScrolling = false;
+    private int lastPosition = -1;
 
     public JokesAdapter(final FBPage firstPage) {
         new CleanDataTask().execute(firstPage.getData());
@@ -83,11 +86,16 @@ public class JokesAdapter extends BaseAdapter {
     }
 
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        lastPosition = -1;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.test_layout, null);
+            convertView = View.inflate(parent.getContext(), R.layout.joke_layout, null);
         }
 
 
@@ -95,65 +103,17 @@ public class JokesAdapter extends BaseAdapter {
             loadNextFeeds(convertView.getContext(), false);
         }
 
+        /*Animation animation = AnimationUtils.loadAnimation(convertView.getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+        convertView.startAnimation(animation);*/
+        lastPosition = position;
+
         final PostHolder holder = new PostHolder(convertView);
 
         final FBPagePost post = mPosts.get(position);
         String url = "https://graph.facebook.com/"+ post.getObjectId() +"/picture?type=normal";
-        String likesTotalUrl = "https://graph.facebook.com/"+ post.getObjectId() +"/likes/?summary=true";
-        String commentsTotalUrl = "https://graph.facebook.com/"+ post.getObjectId() +"/comments/?summary=true";
-
         final View finalConvertView = convertView;
 
-        JsonObjectRequest totalLikesRequest = new JsonObjectRequest(Request.Method.GET,likesTotalUrl,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        post.setTotalLikes(summary.getSummary().get("total_count"));
-                        holder.likes.setVisibility(View.VISIBLE);
-                        holder.likesText.setVisibility(View.VISIBLE);
-                        holder.likes.setText("" + summary.getSummary().get("total_count"));
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        holder.likes.setVisibility(View.GONE);
-                        holder.likesText.setVisibility(View.GONE);
-                    }
-                }
-        );
-
-
-        JsonObjectRequest totalCommentsRequest = new JsonObjectRequest(Request.Method.GET,commentsTotalUrl,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        post.setTotalLikes(summary.getSummary().get("total_count"));
-                        holder.comments.setVisibility(View.VISIBLE);
-                        holder.commentsText.setVisibility(View.VISIBLE);
-                        holder.comments.setText("" + summary.getSummary().get("total_count"));
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        holder.comments.setVisibility(View.GONE);
-                        holder.commentsText.setVisibility(View.GONE);
-                    }
-                }
-        );
-
-        //if(!isScrolling) {
-            holder.image.setImageUrl(url, App.getImageLoader());
-            App.getVolleyRequestQueue().add(totalLikesRequest);
-            App.getVolleyRequestQueue().add(totalCommentsRequest);
-        /*} else {
-            holder.image.setImageUrl(null, App.getImageLoader());
-        }*/
+        holder.image.setImageUrl(url, App.getImageLoader());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override

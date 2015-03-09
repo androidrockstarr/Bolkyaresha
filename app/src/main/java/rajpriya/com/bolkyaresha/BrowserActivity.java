@@ -25,6 +25,8 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.github.pedrovgs.DraggableListener;
 import com.github.pedrovgs.DraggablePanel;
 import com.github.pedrovgs.DraggableView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -50,16 +52,7 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
         //pass the first page
         mAdapter = new JokesAdapter(page);
         mGrid = (GridView)findViewById(R.id.jokes_grid);
-        /*mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //mJokeFragment.showPost((FBPagePost)parent.getAdapter().getItem(position));
-                FBPagePost post = (FBPagePost)parent.getAdapter().getItem(position);
-                Intent i = new Intent(BrowserActivity.this, JokeDetailsActivity.class);
-                i.putExtra("post", post);
-                startActivity(i);
-            }
-        });*/
+
         mGrid.setAdapter(mAdapter);
         mGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -91,9 +84,13 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
             }
         });
         ImageView header = new ImageView(this);
-        //header.setScaleType(ImageView.ScaleType.FIT_START);
         header.setImageDrawable(getResources().getDrawable(R.drawable.bolkyaresha_actionbar_image));
         getSupportActionBar().setBackgroundDrawable(header.getDrawable());
+
+        //Show me the money!
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 

@@ -1,0 +1,32 @@
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+    android:background="@drawable/border"
+tools:context="rajpriya.com.bolkyaresha.JokeImageFragment">
+
+<com.polites.android.GestureImageView
+    android:id="@+id/big_joke_image"
+    android:layout_above="@+id/banner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+<LinearLayout
+    android:id="@+id/banner"
+    android:background="@drawable/border"
+    android:layout_margin="1dp"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center">
+    <ImageView
+        android:id="@+id/share"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_share"/>
+</LinearLayout>
+
+</RelativeLayout>

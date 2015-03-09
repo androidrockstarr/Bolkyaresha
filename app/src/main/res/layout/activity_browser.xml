@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id">
+        </com.google.android.gms.ads.AdView>
         <!-- GridView jokes -->
         <GridView
             android:id="@+id/jokes_grid"
+            android:layout_above="@id/adView"
             android:numColumns="2"
             android:paddingLeft="8dp"
             android:paddingTop="8dp"
@@ -23,6 +33,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <!-- DraggablePanel -->
+
     </RelativeLayout>
+
+
 </rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout>
 
