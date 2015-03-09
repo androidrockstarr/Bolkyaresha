@@ -14,5 +14,12 @@
     <string name="title_activity_joke_details">JokeDetailsActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_notification">NotificationActivity</string>
+
+    <!-- TODO this is test id, replace it by your own Ad Unit ID when releasing-->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <!--Replace with your own ad unit id. -->
+    <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 
 </resources>

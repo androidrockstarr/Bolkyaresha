@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import rajpriya.com.bolkyaresha.R;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
+import rajpriya.com.bolkyaresha.util.Utils;
 
 public class JokeDetailsActivity extends ActionBarActivity implements JokeImageFragment.OnFragmentInteractionListener {
 
@@ -58,6 +59,8 @@ public class JokeDetailsActivity extends ActionBarActivity implements JokeImageF
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         getSupportActionBar().hide();
+
+        Utils.trackScreen(this, "JokeDetailsActivity");
 
     }
 

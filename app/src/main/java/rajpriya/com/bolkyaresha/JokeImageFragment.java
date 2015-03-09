@@ -11,14 +11,26 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
 import rajpriya.com.bolkyaresha.R;
+import rajpriya.com.bolkyaresha.models.FBLikesSummary;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
+import rajpriya.com.bolkyaresha.util.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +50,7 @@ public class JokeImageFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FBPagePost mPost;
+    private String objectId;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,6 +87,11 @@ public class JokeImageFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_joke_image, container, false);
         final NetworkImageView image = (NetworkImageView)view.findViewById(R.id.big_joke_image);
+        final TextView likes = (TextView)view.findViewById(R.id.no_likes);
+        final TextView likesText = (TextView)view.findViewById(R.id.no_likes_text);
+        final TextView comments = (TextView)view.findViewById(R.id.no_comments);
+        final TextView commentsText = (TextView)view.findViewById(R.id.no_comments_text);
+
         if (!TextUtils.isEmpty(mPost.getObjectId()) && TextUtils.equals(mPost.getType(), "photo")) {
             String url = "https://graph.facebook.com/"+ mPost.getObjectId() +"/picture?type=normal";
             image.setImageUrl(url, App.getImageLoader());
@@ -93,9 +111,64 @@ public class JokeImageFragment extends Fragment {
         view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareImage(image);
+                Utils.shareImage(image, getActivity());
             }
         });
+
+        String likesTotalUrl = "https://graph.facebook.com/"+ mPost.getObjectId() +"/likes/?summary=true";
+        String commentsTotalUrl = "https://graph.facebook.com/"+ mPost.getObjectId() +"/comments/?summary=true";
+
+        JsonObjectRequest totalLikesRequest = new JsonObjectRequest(Request.Method.GET,likesTotalUrl,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
+                        mPost.setTotalLikes(summary.getSummary().get("total_count"));
+                        likes.setVisibility(View.VISIBLE);
+                        likesText.setVisibility(View.VISIBLE);
+                        likes.setText("" + summary.getSummary().get("total_count"));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        likes.setVisibility(View.GONE);
+                        likesText.setVisibility(View.GONE);
+                    }
+                }
+        );
+
+
+        JsonObjectRequest totalCommentsRequest = new JsonObjectRequest(Request.Method.GET,commentsTotalUrl,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
+                        mPost.setTotalLikes(summary.getSummary().get("total_count"));
+                        comments.setVisibility(View.VISIBLE);
+                        commentsText.setVisibility(View.VISIBLE);
+                        comments.setText("" + summary.getSummary().get("total_count"));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        comments.setVisibility(View.GONE);
+                        commentsText.setVisibility(View.GONE);
+                    }
+                }
+        );
+
+        App.getVolleyRequestQueue().add(totalLikesRequest);
+        App.getVolleyRequestQueue().add(totalCommentsRequest);
+
+        AdView mAdView = (AdView) view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+
         return view;
     }
 
@@ -136,31 +209,6 @@ public class JokeImageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-    private void shareImage(View content) {
-        content.setDrawingCacheEnabled(true);
-
-        Bitmap bitmap = content.getDrawingCache();
-        File root = Environment.getExternalStorageDirectory();
-        File cachePath = new File(root.getAbsolutePath() + "/DCIM/Camera/bolkyaresha_temp_image.jpg");
-        if(cachePath.exists()) {
-            cachePath.delete();
-        }
-        try {
-            cachePath.createNewFile();
-            FileOutputStream ostream = new FileOutputStream(cachePath);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-            ostream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/*");
-        share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(cachePath));
-        startActivity(Intent.createChooser(share,"Share via"));
-
     }
 
 }
