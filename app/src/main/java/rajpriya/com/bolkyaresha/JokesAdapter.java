@@ -1,37 +1,66 @@
 package rajpriya.com.bolkyaresha;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
+import rajpriya.com.bolkyaresha.models.FBLikesSummary;
+import rajpriya.com.bolkyaresha.models.FBPage;
+import rajpriya.com.bolkyaresha.models.FBPagePaging;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
+import rajpriya.com.bolkyaresha.models.FBPostShares;
 
 /**
  * Created by rajkumar.waghmare on 2014/11/29.
  */
-public class JokesAdapter implements ListAdapter {
-    private ArrayList<FBPagePost> mPosts;
+public class JokesAdapter extends BaseAdapter {
+    private ArrayList<FBPagePost> mPosts = new ArrayList<FBPagePost>();
+    private FBPagePaging mCurrentPaging;
+    private boolean isScrolling = false;
 
-    public JokesAdapter(ArrayList<FBPagePost> posts) {
-        mPosts = posts;
-
+    public JokesAdapter(final FBPage firstPage) {
+        new CleanDataTask().execute(firstPage.getData());
+        mCurrentPaging = firstPage.getPaging();
     }
 
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-
+    public void setIsScrolling(boolean isScrolling) {
+        this.isScrolling = isScrolling;
     }
 
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-
+    public ArrayList<FBPagePost> cleanData(ArrayList<FBPagePost> posts) {
+        ArrayList<FBPagePost> ret = new ArrayList<FBPagePost>();
+        for(int position=0; position < posts.size(); position++) {
+            if (!TextUtils.isEmpty(posts.get(position).getObjectId()) &&
+                    TextUtils.equals(posts.get(position).getType(), "photo")) {
+                ret.add(posts.get(position));
+            }
+        }
+        return ret;
     }
+
 
     @Override
     public int getCount() {
@@ -40,7 +69,7 @@ public class JokesAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return mPosts.get(position);
     }
 
     @Override
@@ -53,41 +82,132 @@ public class JokesAdapter implements ListAdapter {
         return false;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-            convertView = View.inflate(parent.getContext(), R.layout.joke_layout, null);
-        }
-        if (!TextUtils.isEmpty(mPosts.get(position).getLink()) && TextUtils.equals(mPosts.get(position).getType(), "photo")) {
-            ((NetworkImageView) convertView.findViewById(R.id.joke_image)).setImageUrl(mPosts.get(position).getLink(), App.getImageLoader());
+            convertView = View.inflate(parent.getContext(), R.layout.test_layout, null);
         }
 
+
+        if(mPosts.size() - position < 15) {
+            loadNextFeeds(convertView.getContext(), false);
+        }
+
+        final PostHolder holder = new PostHolder(convertView);
+
+        final FBPagePost post = mPosts.get(position);
+        String url = "https://graph.facebook.com/"+ post.getObjectId() +"/picture?type=normal";
+        String likesTotalUrl = "https://graph.facebook.com/"+ post.getObjectId() +"/likes/?summary=true";
+        String commentsTotalUrl = "https://graph.facebook.com/"+ post.getObjectId() +"/comments/?summary=true";
+
+        final View finalConvertView = convertView;
+
+        JsonObjectRequest totalLikesRequest = new JsonObjectRequest(Request.Method.GET,likesTotalUrl,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
+                        post.setTotalLikes(summary.getSummary().get("total_count"));
+                        holder.likes.setVisibility(View.VISIBLE);
+                        holder.likesText.setVisibility(View.VISIBLE);
+                        holder.likes.setText("" + summary.getSummary().get("total_count"));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        holder.likes.setVisibility(View.GONE);
+                        holder.likesText.setVisibility(View.GONE);
+                    }
+                }
+        );
+
+
+        JsonObjectRequest totalCommentsRequest = new JsonObjectRequest(Request.Method.GET,commentsTotalUrl,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Gson gson = new Gson();
+                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
+                        post.setTotalLikes(summary.getSummary().get("total_count"));
+                        holder.comments.setVisibility(View.VISIBLE);
+                        holder.commentsText.setVisibility(View.VISIBLE);
+                        holder.comments.setText("" + summary.getSummary().get("total_count"));
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        holder.comments.setVisibility(View.GONE);
+                        holder.commentsText.setVisibility(View.GONE);
+                    }
+                }
+        );
+
+        //if(!isScrolling) {
+            holder.image.setImageUrl(url, App.getImageLoader());
+            App.getVolleyRequestQueue().add(totalLikesRequest);
+            App.getVolleyRequestQueue().add(totalCommentsRequest);
+        /*} else {
+            holder.image.setImageUrl(null, App.getImageLoader());
+        }*/
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(finalConvertView.getContext(), JokeDetailsActivity.class);
+                i.putExtra("post", post);
+                finalConvertView.getContext().startActivity(i);
+            }
+        });
         return convertView;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
-    }
+    private void loadNextFeeds(final Context parentActivity, final boolean firstLoad) {
+        String url;
+        if(!firstLoad) {
+            url = mCurrentPaging.getNext();
+        } else {
+            url = App.FB_PAGE_URL;
+        }
+        if(TextUtils.isEmpty(url)) {
+            return;
+        }
 
-    @Override
-    public int getViewTypeCount() {
-        return 0;
-    }
+        if(parentActivity instanceof DataLoadingListener) {
+            ((DataLoadingListener)parentActivity).onDataLoadingStarted();
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
+        }
 
-    @Override
-    public boolean areAllItemsEnabled() {
-        return true;
-    }
+        JsonObjectRequest pagePostRequest = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if(parentActivity instanceof DataLoadingListener) {
+                            ((DataLoadingListener)parentActivity).onDataLoadingFinished();
+                        }
 
-    @Override
-    public boolean isEnabled(int position) {
-        return true;
+                        Gson gson = new Gson();
+                        final FBPage page = gson.fromJson(response.toString(), FBPage.class);
+                        new CleanDataTask().execute(page.getData());
+                        mCurrentPaging = page.getPaging();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //TODO: show network error, disable progress bar
+                        if(parentActivity instanceof DataLoadingListener) {
+                            ((DataLoadingListener)parentActivity).onDataLoadingFinished();
+
+                        }
+                    }
+                }
+        );
+        App.getVolleyRequestQueue().add(pagePostRequest);
     }
 
 /*    private static class Holder {
@@ -97,4 +217,57 @@ public class JokesAdapter implements ListAdapter {
 
     }*/
 
+    public interface DataLoadingListener {
+        public void onDataLoadingStarted();
+        public void onDataLoadingFinished();
+    }
+
+    public void refresh(Context caller, boolean firstLoad) {
+        mPosts.clear();
+        notifyDataSetChanged();
+        loadNextFeeds(caller, firstLoad);
+    }
+
+
+    public  class CleanDataTask extends AsyncTask<ArrayList<FBPagePost>, Void, ArrayList<FBPagePost>> {
+        @Override
+        protected void onPostExecute(ArrayList<FBPagePost> cleaned) {
+            mPosts.addAll(cleaned);
+            notifyDataSetChanged();
+        }
+        @Override
+        protected ArrayList<FBPagePost> doInBackground (ArrayList < FBPagePost >...params){
+            ArrayList<FBPagePost> input = (ArrayList<FBPagePost>) params[0];
+            ArrayList<FBPagePost> ret = cleanData(input);
+            //ret.addAll(cleanData((ArrayList<FBPagePost>) params[0]));
+            return ret;
+        }
+    }
+
+
+
+    private static final class PostHolder {
+
+        final NetworkImageView image;  // volley image for network-hosted images
+        final TextView likes;
+        final TextView likesText;
+        final TextView comments;
+        final TextView commentsText;
+
+        PostHolder(View v) {
+            image = (NetworkImageView)v.findViewById(R.id.big_joke_image);
+            likes = (TextView)v.findViewById(R.id.no_likes);
+            comments = (TextView)v.findViewById(R.id.no_comments);
+            likesText = (TextView)v.findViewById(R.id.no_likes_text);
+            commentsText = (TextView)v.findViewById(R.id.no_comments_text);
+            v.setTag(this);
+        }
+
+        static PostHolder get(View v) {
+            if (v.getTag() instanceof PostHolder) {
+                return (PostHolder) v.getTag();
+            }
+            return new PostHolder(v);
+        }
+    }
 }

@@ -19,6 +19,13 @@ public class FBPage implements Parcelable {
     private static final String DATA = "data";
     private static final String PAGING = "paging";
 
+    @SerializedName(DATA)
+    private ArrayList<FBPagePost> data;
+    @SerializedName(PAGING)
+    private FBPagePaging paging;
+
+    public FBPage() {}
+
     public ArrayList<FBPagePost> getData() {
         return data;
     }
@@ -27,17 +34,19 @@ public class FBPage implements Parcelable {
         this.data = data;
     }
 
-    @SerializedName(DATA)
-    private ArrayList<FBPagePost> data;
-    //@SerializedName(PAGING)
-    //private FBPagePaging paging;
+    public FBPagePaging getPaging() {
+        return paging;
+    }
 
-    public FBPage() {}
+    public void setPaging(FBPagePaging paging) {
+        this.paging = paging;
+    }
+
 
     public FBPage(Parcel in) {
         Bundle bundle = in.readBundle(getClass().getClassLoader());
         data = bundle.getParcelableArrayList(DATA);
-        //paging = bundle.getParcelable(PAGING);
+        paging = (FBPagePaging)bundle.getParcelable(PAGING);
     }
 
 
@@ -69,7 +78,7 @@ public class FBPage implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(DATA, data);
-        //bundle.putString(PAGING, paging);
+        bundle.putParcelable(PAGING, paging);
         out.writeBundle(bundle);
     }
 

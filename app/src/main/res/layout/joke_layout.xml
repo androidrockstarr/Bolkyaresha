@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@drawable/border"
+    android:layout_height="250dp">
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/big_joke_image"
+        android:background="@android:color/holo_blue_bright"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="250dp" />
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="left|center_vertical"
+        android:background="#BBFFFFFF">
+        <TextView
+            android:id="@+id/no_likes"
+            android:layout_width="wrap_content"
+            android:textColor="@color/com_facebook_blue"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/no_likes_text"
+            android:text=" likes"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/no_comments"
+            android:textColor="@color/com_facebook_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"/>
+        <TextView
+            android:id="@+id/no_comments_text"
+            android:text=" comments"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
 </RelativeLayout>

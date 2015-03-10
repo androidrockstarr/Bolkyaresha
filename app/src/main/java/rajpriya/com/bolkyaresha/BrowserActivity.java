@@ -1,48 +1,106 @@
 package rajpriya.com.bolkyaresha;
 
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
+import com.android.volley.toolbox.NetworkImageView;
+import com.github.pedrovgs.DraggableListener;
 import com.github.pedrovgs.DraggablePanel;
+import com.github.pedrovgs.DraggableView;
 
 import java.util.ArrayList;
 
+import rajpriya.com.bolkyaresha.models.FBPage;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
 
 
-public class BrowserActivity extends ActionBarActivity {
+public class BrowserActivity extends ActionBarActivity implements JokesAdapter.DataLoadingListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String PAGE_DATA = "fb_page_data";
 
     private GridView mGrid;
-    private DraggablePanel mPanel;
     private JokePostFragment mJokeFragment;
+    private SwipeRefreshLayout mSwipeLayout;
+    private JokesAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-        final ArrayList<FBPagePost> pageData = getIntent().getExtras().getParcelableArrayList(PAGE_DATA);
-        mJokeFragment = JokePostFragment.newInstance(pageData.get(0));
-        JokesAdapter adapter = new JokesAdapter(pageData);
+        final FBPage page = getIntent().getExtras().getParcelable(PAGE_DATA);
+        mJokeFragment = JokePostFragment.newInstance(page.getData().get(0));
+        //pass the first page
+        mAdapter = new JokesAdapter(page);
         mGrid = (GridView)findViewById(R.id.jokes_grid);
-        mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mPanel.setVisibility(View.VISIBLE);
-                mPanel.maximize();
-                mJokeFragment.showPost(pageData.get(position));
+                //mJokeFragment.showPost((FBPagePost)parent.getAdapter().getItem(position));
+                FBPagePost post = (FBPagePost)parent.getAdapter().getItem(position);
+                Intent i = new Intent(BrowserActivity.this, JokeDetailsActivity.class);
+                i.putExtra("post", post);
+                startActivity(i);
+            }
+        });*/
+        mGrid.setAdapter(mAdapter);
+        mGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mAdapter.setIsScrolling(scrollState != SCROLL_STATE_IDLE);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
             }
         });
-        mGrid.setAdapter(adapter);
-        mPanel = (DraggablePanel)findViewById(R.id.draggable_panel);
+        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeLayout.setOnRefreshListener(this);
+        mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        mSwipeLayout.setSize(SwipeRefreshLayout.DEFAULT);
+
+        mGrid.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                //TODO ideal solution should use ScrollY==0 check.
+                int firstVisiblePosition = mGrid.getFirstVisiblePosition();
+                if(firstVisiblePosition == 0) mSwipeLayout.setEnabled(true);
+                else mSwipeLayout.setEnabled(false);
+
+            }
+        });
+        ImageView header = new ImageView(this);
+        //header.setScaleType(ImageView.ScaleType.FIT_START);
+        header.setImageDrawable(getResources().getDrawable(R.drawable.bolkyaresha_actionbar_image));
+        getSupportActionBar().setBackgroundDrawable(header.getDrawable());
+
     }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,10 +119,67 @@ public class BrowserActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_view_type) {
+            int currentCOlumns = mGrid.getNumColumns();
+            int currentVisible = mGrid.getFirstVisiblePosition();
+            if(currentCOlumns == 1) {
+                int paddingPx = dpToPx(8);
+                mGrid.setNumColumns(2);
+                mGrid.setVerticalSpacing(paddingPx);
+                mGrid.setHorizontalSpacing(paddingPx);
+                mGrid.setPadding(paddingPx,paddingPx,paddingPx,0);
+            } else {
+                int paddingPx = dpToPx(16);
+                int paddingPxTop = dpToPx(8);
+                mGrid.setNumColumns(1);
+                mGrid.setVerticalSpacing(paddingPx);
+                mGrid.setHorizontalSpacing(paddingPx);
+                mGrid.setPadding(paddingPx,paddingPxTop,paddingPx,0);
+            }
+            mGrid.setSelection(currentVisible);
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+    @Override
+    public void onDataLoadingStarted() {
+        //mProgress.setVisibility(View.VISIBLE);
+        mSwipeLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void onDataLoadingFinished() {
+        //mProgress.setVisibility(View.GONE);
+        mSwipeLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        //mSwipeLayout.setRefreshing(true);
+        mAdapter.refresh(this, true);
+    }
+
+    public static int dpToPx(int dp)    {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
 
 }

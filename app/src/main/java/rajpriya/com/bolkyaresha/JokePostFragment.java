@@ -2,6 +2,7 @@ package rajpriya.com.bolkyaresha;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,8 @@ public class JokePostFragment extends Fragment {
      */
     private static final String IMAGE_LINK = "link-to-image";
 
+    private NetworkImageView mImage;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -41,12 +44,14 @@ public class JokePostFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_browser, container, false);
+        mImage = (NetworkImageView) rootView.findViewById(R.id.joke_image);
         Bundle args = getArguments();
         if (args != null) {
             FBPagePost post = args.getParcelable(IMAGE_LINK);
             //String link = args.getString(IMAGE_LINK);
-            if (!TextUtils.isEmpty(post.getLink()) && TextUtils.equals(post.getType(), "photo")) {
-                ((NetworkImageView) rootView.findViewById(R.id.joke_image)).setImageUrl(post.getLink(), App.getImageLoader());
+            if (!TextUtils.isEmpty(post.getObjectId()) && TextUtils.equals(post.getType(), "photo")) {
+                String url = "https://graph.facebook.com/"+ post.getObjectId() +"/picture?type=normal";
+                mImage.setImageUrl(url, App.getImageLoader());
             }
 
         }
@@ -54,8 +59,12 @@ public class JokePostFragment extends Fragment {
     }
 
     public void showPost(FBPagePost post) {
-        if (!TextUtils.isEmpty(post.getLink()) && TextUtils.equals(post.getType(), "photo")) {
-            ((NetworkImageView) getView().findViewById(R.id.joke_image)).setImageUrl(post.getLink(), App.getImageLoader());
+        if (!TextUtils.isEmpty(post.getObjectId()) && TextUtils.equals(post.getType(), "photo")) {
+            String url = "https://graph.facebook.com/"+ post.getObjectId() +"/picture?type=normal";
+            mImage.setImageUrl(url, App.getImageLoader());
+            mImage.setBackgroundColor(android.R.color.holo_red_dark);
+            ((ActionBarActivity)JokePostFragment.this.getActivity()).getSupportActionBar().hide();
         }
     }
+
 }

@@ -24,7 +24,8 @@ public class App extends Application{
         return mRequestQueue;
     }
 
-
+    private static final String PAGE_ID = "OfficialChintooPage";
+    public static  final String FB_PAGE_URL = "https://graph.facebook.com/"+PAGE_ID+"/feed?access_token=668151053299134|iR9g4u-L7ok1_mky8-cNDv8gdV4";
     @Override
     public void onCreate() {
         super.onCreate();

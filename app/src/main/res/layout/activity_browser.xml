@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/ll_container"
-android:layout_width="match_parent"
-android:layout_height="match_parent">
-    <!-- GridView jokes -->
-    <GridView
-        android:id="@+id/jokes_grid"
-        android:numColumns="2"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-
-    <!-- DraggablePanel -->
-
-    <com.github.pedrovgs.DraggablePanel
-        android:id="@+id/draggable_panel"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
-
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- GridView jokes -->
+        <GridView
+            android:id="@+id/jokes_grid"
+            android:numColumns="2"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:verticalSpacing="8dp"
+            android:horizontalSpacing="8dp"
+            android:scrollingCache="false"
+            android:animationCache="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <!-- DraggablePanel -->
+    </RelativeLayout>
+</rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout>
 
