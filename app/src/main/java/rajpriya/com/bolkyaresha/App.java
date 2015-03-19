@@ -21,6 +21,7 @@ public class App extends Application{
 
     private static RequestQueue mRequestQueue;
     private static ImageLoader mImageLoader;
+    public static int LUANCH_COUNT = 0;
 
     public static ImageLoader getImageLoader() {
         return mImageLoader;

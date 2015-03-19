@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -15,6 +16,8 @@ import com.groboot.pushapps.DeviceIDTypes;
 import com.groboot.pushapps.PushManager;
 
 import org.json.JSONObject;
+
+import java.util.Random;
 
 import rajpriya.com.bolkyaresha.models.FBPage;
 
@@ -27,6 +30,14 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+
+        int bannerIds[] = new int[]{R.drawable.banner_1, R.drawable.banner_2, R.drawable.banner_3,
+                R.drawable.banner_4,};
+
+        ((ImageView)findViewById(R.id.banner)).setImageResource(bannerIds[(App.LUANCH_COUNT)%4]);
+
+        App.LUANCH_COUNT++;
+
         fetchPagePosts();
 
         //TODO Move pushmanager stuff to App.java and unregister when app session ends
