@@ -135,7 +135,7 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
             }
             mGrid.setSelection(currentVisible);
 
-            return true;
+            return false;
         }
 
         return super.onOptionsItemSelected(item);

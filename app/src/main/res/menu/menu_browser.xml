@@ -4,6 +4,7 @@
     tools:context="rajpriya.com.bolkyaresha.BrowserActivity">
     <item android:id="@+id/action_view_type"
         android:title="@string/action_view_type"
+        android:background="@drawable/transparent_on_click"
         android:icon="@android:drawable/ic_menu_sort_by_size"
         app:showAsAction="always" />
 </menu>
