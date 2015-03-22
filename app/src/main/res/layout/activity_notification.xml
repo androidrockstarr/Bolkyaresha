@@ -26,6 +26,7 @@ tools:context="rajpriya.com.bolkyaresha.JokeImageFragment">
         android:focusable="true"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:background="@drawable/transparent_on_click"
         android:src="@android:drawable/ic_menu_share"/>
 </LinearLayout>
 
