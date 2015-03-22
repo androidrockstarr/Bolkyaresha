@@ -7,11 +7,13 @@ import android.support.v4.util.LruCache;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.groboot.pushapps.DeviceIDTypes;
 import com.groboot.pushapps.PushManager;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.HashMap;
 
 /**
@@ -58,6 +60,7 @@ public class App extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         mRequestQueue = Volley.newRequestQueue(this);
         mImageLoader = new ImageLoader(this.mRequestQueue, new ImageLoader.ImageCache() {
             private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);

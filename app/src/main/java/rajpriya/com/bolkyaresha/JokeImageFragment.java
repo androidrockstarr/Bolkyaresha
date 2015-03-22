@@ -53,6 +53,7 @@ public class JokeImageFragment extends Fragment {
     private String mParam2;
     private FBPagePost mPost;
     private String objectId;
+    private boolean mShowAds;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,10 +64,11 @@ public class JokeImageFragment extends Fragment {
      * @return A new instance of fragment JokeImageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JokeImageFragment newInstance(FBPagePost post) {
+    public static JokeImageFragment newInstance(FBPagePost post, boolean showTopAdsView) {
         JokeImageFragment fragment = new JokeImageFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_PARAM1, post);
+        args.putBoolean("show_top_ads_view", showTopAdsView);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +82,7 @@ public class JokeImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPost = getArguments().getParcelable(ARG_PARAM1);
+            mShowAds = getArguments().getBoolean("show_top_ads_view");
         }
     }
 
@@ -185,8 +188,13 @@ public class JokeImageFragment extends Fragment {
         App.getVolleyRequestQueue().add(totalCommentsRequest);
 
         AdView mAdView = (AdView) view.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        if(mShowAds) {
+            AdRequest adRequest = new AdRequest.Builder().build();
+            mAdView.loadAd(adRequest);
+        } else {
+            mAdView.setVisibility(View.GONE);
+        }
+
 
 
         return view;

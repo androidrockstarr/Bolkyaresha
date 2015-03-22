@@ -1,5 +1,6 @@
 package rajpriya.com.bolkyaresha;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.net.Uri;
@@ -19,11 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import rajpriya.com.bolkyaresha.R;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
-import rajpriya.com.bolkyaresha.util.Utils;
 
-public class JokeDetailsActivity extends ActionBarActivity implements JokeImageFragment.OnFragmentInteractionListener {
+public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -33,42 +36,49 @@ public class JokeDetailsActivity extends ActionBarActivity implements JokeImageF
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    //SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
 
-    private FBPagePost mPost;
-
+    private ArrayList<FBPagePost> mPosts = new ArrayList<FBPagePost>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_joke_details2);
+        setContentView(R.layout.activity_horizontal_bowsing);
+        getSupportActionBar().hide();
 
-        mPost = (FBPagePost)getIntent().getParcelableExtra("post");
-
+        mPosts = getIntent().getParcelableArrayListExtra("all_posts");
+        int lastSelectedPosition = getIntent().getExtras().getInt("selected_position");
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setPageTransformer(false, new ReaderViewPagerTransformer(ReaderViewPagerTransformer.TransformType.FLOW));
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        getSupportActionBar().hide();
 
-        Utils.trackScreen(this, "JokeDetailsActivity");
+        mViewPager.setCurrentItem(lastSelectedPosition);
 
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_joke_details, menu);
+        getMenuInflater().inflate(R.menu.menu_horizontal_bowsing, menu);
         return true;
     }
 
@@ -87,11 +97,6 @@ public class JokeDetailsActivity extends ActionBarActivity implements JokeImageF
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -107,36 +112,14 @@ public class JokeDetailsActivity extends ActionBarActivity implements JokeImageF
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            //return PlaceholderFragment.newInstance(position + 1);
-            switch (position) {
-                case 0:
-                    return JokeImageFragment.newInstance(mPost, true);
-                case 1:
-                    return JokeCommentsFragment.newInstance("","");
-            }
-            return null;
+            return JokeImageFragment.newInstance(mPosts.get(position), false);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 1;
+            return mPosts.size();
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
     }
-
 
 }

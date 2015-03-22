@@ -36,7 +36,8 @@ import rajpriya.com.bolkyaresha.models.FBPagePost;
 
 public class BrowserActivity extends ActionBarActivity implements JokesAdapter.DataLoadingListener, SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String PAGE_DATA = "fb_page_data";
+    public static final String PAGE_DATA1 = "fb_page_data1";
+    public static final String PAGE_DATA2 = "fb_page_data2";
 
     private GridView mGrid;
     private JokePostFragment mJokeFragment;
@@ -47,13 +48,22 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browser);
-        final FBPage page = getIntent().getExtras().getParcelable(PAGE_DATA);
+        final FBPage page = getIntent().getExtras().getParcelable(PAGE_DATA1);
         mJokeFragment = JokePostFragment.newInstance(page.getData().get(0));
         //pass the first page
         mAdapter = new JokesAdapter(page);
         mGrid = (GridView)findViewById(R.id.jokes_grid);
 
         mGrid.setAdapter(mAdapter);
+        /*mGrid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BrowserActivity.this, HorizontalBrowsing.class);
+                i.putExtra("apdapter", (JokesAdapter)mGrid.getAdapter());
+                startActivity(i);
+            }
+        })*/;
+
         mGrid.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -113,19 +123,25 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if (id == R.id.action_top) {
+            mGrid.setSelection(0);
+            return true;
+        }
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        else if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_view_type) {
             int currentCOlumns = mGrid.getNumColumns();
             int currentVisible = mGrid.getFirstVisiblePosition();
             if(currentCOlumns == 1) {
+                item.setIcon(R.drawable.ic_action_view_as_list);
                 int paddingPx = dpToPx(8);
                 mGrid.setNumColumns(2);
                 mGrid.setVerticalSpacing(paddingPx);
                 mGrid.setHorizontalSpacing(paddingPx);
                 mGrid.setPadding(paddingPx,paddingPx,paddingPx,0);
             } else {
+                item.setIcon(R.drawable.ic_action_view_as_grid);
                 int paddingPx = dpToPx(16);
                 int paddingPxTop = dpToPx(8);
                 mGrid.setNumColumns(1);

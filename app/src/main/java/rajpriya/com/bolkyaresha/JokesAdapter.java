@@ -93,7 +93,7 @@ public class JokesAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
             convertView = View.inflate(parent.getContext(), R.layout.joke_layout, null);
         }
@@ -115,14 +115,27 @@ public class JokesAdapter extends BaseAdapter {
 
         holder.image.setImageUrl(url, App.getImageLoader());
 
-        convertView.setOnClickListener(new View.OnClickListener() {
+        /*convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(finalConvertView.getContext(), JokeDetailsActivity.class);
                 i.putExtra("post", post);
+                i.putExtra("all_posts", JokesAdapter.this);
+                finalConvertView.getContext().startActivity(i);
+            }
+        });*/
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(finalConvertView.getContext(), HorizontalBrowsing.class);
+                //i.putExtra("post", post);
+                i.putExtra("all_posts", mPosts);
+                i.putExtra("selected_position", position);
                 finalConvertView.getContext().startActivity(i);
             }
         });
+
         return convertView;
     }
 

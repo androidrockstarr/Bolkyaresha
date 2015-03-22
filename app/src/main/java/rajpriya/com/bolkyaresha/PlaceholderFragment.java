@@ -115,7 +115,7 @@ public class PlaceholderFragment extends Fragment {
                             //FBPage page2 = new FBPage();
                             //page2.setData(page.getData());
                             Intent i = new Intent(getActivity(), BrowserActivity.class);
-                            i.putParcelableArrayListExtra(BrowserActivity.PAGE_DATA, page.getData());
+                            i.putParcelableArrayListExtra(BrowserActivity.PAGE_DATA1, page.getData());
                             startActivity(i);
 
 

@@ -90,8 +90,8 @@ public class MainActivity extends ActionBarActivity {
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
                         FBPage page = gson.fromJson(response.toString(), FBPage.class);
-                        Intent i = new Intent(MainActivity.this, BrowserActivity.class);
-                        i.putExtra(BrowserActivity.PAGE_DATA, page);
+                        Intent i = new Intent(MainActivity.this, TabbedBrowserActivity.class);
+                        i.putExtra(BrowserActivity.PAGE_DATA1, page);
                         startActivity(i);
                         finish();
                     }
