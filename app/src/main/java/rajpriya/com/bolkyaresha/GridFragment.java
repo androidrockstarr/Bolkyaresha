@@ -2,16 +2,11 @@ package rajpriya.com.bolkyaresha;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.AbsListView;
 import android.widget.GridView;
-
-import com.google.android.gms.common.api.Api;
 
 import rajpriya.com.bolkyaresha.models.FBPage;
 
@@ -96,17 +91,6 @@ public class GridFragment extends Fragment {
 
         mGrid = (GridView)rootView.findViewById(R.id.jokes_grid);
         mGrid.setAdapter(mAdapter);
-
-        mGrid.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                //TODO ideal solution should use ScrollY==0 check.
-                int firstVisiblePosition = mGrid.getFirstVisiblePosition();
-                if (firstVisiblePosition == 0) ((TabbedBrowserActivity)getActivity()).getSwipeLayout().setEnabled(true);
-                else ((TabbedBrowserActivity)getActivity()).getSwipeLayout().setEnabled(false);
-
-            }
-        });
 
         return rootView;
     }

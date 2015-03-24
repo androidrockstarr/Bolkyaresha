@@ -118,7 +118,7 @@ public class JokeImageFragment extends Fragment {
                     //image.setImageResource(R.drawable.default_no_image);
                 }
             });
-            image.setBackgroundColor(android.R.color.holo_red_dark);
+            image.setBackgroundColor(getActivity().getResources().getColor(android.R.color.white));
         }
         /*image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,10 +147,17 @@ public class JokeImageFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
                         FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        mPost.setTotalLikes(summary.getSummary().get("total_count"));
-                        likes.setVisibility(View.VISIBLE);
-                        likesText.setVisibility(View.VISIBLE);
-                        likes.setText("" + summary.getSummary().get("total_count"));
+                        String likesCount = summary.getSummary().get("total_count");
+                        if(TextUtils.isEmpty(likesCount) || TextUtils.equals(likesCount, "0")) {
+                            likes.setVisibility(View.GONE);
+                            likesText.setVisibility(View.GONE);
+                        } else {
+                            mPost.setTotalLikes(likesCount);
+                            likes.setVisibility(View.VISIBLE);
+                            likesText.setVisibility(View.VISIBLE);
+                            likes.setText("" + likesCount);
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -169,10 +176,17 @@ public class JokeImageFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
                         FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        mPost.setTotalLikes(summary.getSummary().get("total_count"));
-                        comments.setVisibility(View.VISIBLE);
-                        commentsText.setVisibility(View.VISIBLE);
-                        comments.setText("" + summary.getSummary().get("total_count"));
+                        String commentsCount = summary.getSummary().get("total_count");
+                        if(TextUtils.isEmpty(commentsCount) || TextUtils.equals(commentsCount, "0")) {
+                            comments.setVisibility(View.GONE);
+                            commentsText.setVisibility(View.GONE);
+                        } else {
+                            mPost.setTotalLikes(summary.getSummary().get("total_count"));
+                            comments.setVisibility(View.VISIBLE);
+                            commentsText.setVisibility(View.VISIBLE);
+                            comments.setText("" + summary.getSummary().get("total_count"));
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
