@@ -75,6 +75,7 @@
         <activity
             android:name=".notifications.NotificationActivity"
             android:label="@string/title_activity_notification"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" >
         </activity>
 
@@ -90,14 +91,17 @@
             android:value="f88243e81946f6120d684e29f8ebd408e11110c1" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".HorizontalBrowsing"
             android:label="" >
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".TabbedBrowser"
             android:label="@string/title_activity_tabbed_browser" >
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".TabbedBrowserActivity"
             android:label="" >
         </activity>

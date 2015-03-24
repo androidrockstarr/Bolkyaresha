@@ -30,31 +30,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
-
         int bannerIds[] = new int[]{R.drawable.banner_1, R.drawable.banner_2, R.drawable.banner_3,
                 R.drawable.banner_4,};
-
         ((ImageView)findViewById(R.id.banner)).setImageResource(bannerIds[(App.LUANCH_COUNT)%4]);
-
         App.LUANCH_COUNT++;
-
         fetchPagePosts();
-
-        //TODO Move pushmanager stuff to App.java and unregister when app session ends
-
-        // optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
-        //If you use this method, you must do it before your first call to init(Context,String,String), and
-        //it is recommended to never change the id type after setting it for the first time
-        //to avoid duplicate devices registrations.
-        PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
-        // Start PushApps and register to the push notification service (GCM)
-        PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
-        //optional - allows more than on notifications in the status bar, default is false
-        PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
-        PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
-        PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
-        //optional - set a your own icon for the notification, defaults is the application icon
-        //PushManager.getInstance(getApplicationContext()).setNotificationIcon(R.drawable.notification_icon);
 
     }
 
@@ -84,22 +64,41 @@ public class MainActivity extends ActionBarActivity {
 
     private void fetchPagePosts() {
 
-        JsonObjectRequest pagePostRequest = new JsonObjectRequest(Request.Method.GET, App.FB_PAGE_URL, null,
+        JsonObjectRequest pagePostRequest = new JsonObjectRequest(Request.Method.GET, App.FB_APP_PAGE_URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
-                        FBPage page = gson.fromJson(response.toString(), FBPage.class);
-                        Intent i = new Intent(MainActivity.this, TabbedBrowserActivity.class);
-                        i.putExtra(BrowserActivity.PAGE_DATA1, page);
-                        startActivity(i);
-                        finish();
+                        final FBPage page1 = gson.fromJson(response.toString(), FBPage.class);
+                        final Intent i = new Intent(MainActivity.this, TabbedBrowserActivity.class);
+                        i.putExtra(BrowserActivity.PAGE_DATA1, page1);
+                        JsonObjectRequest pagePostRequest2 = new JsonObjectRequest(Request.Method.GET, App.FB_PAGE_URL, null,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        Gson gson = new Gson();
+                                        FBPage page2 = gson.fromJson(response.toString(), FBPage.class);
+                                        i.putExtra(BrowserActivity.PAGE_DATA2, page2);
+                                        startActivity(i);
+                                        finish();
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Gson gson = new Gson();
+                                    }
+                                }
+                        );
+                        App.getVolleyRequestQueue().add(pagePostRequest2);
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //TODO: show network error, disable progress bar
+                        Gson gson = new Gson();
                     }
                 }
         );

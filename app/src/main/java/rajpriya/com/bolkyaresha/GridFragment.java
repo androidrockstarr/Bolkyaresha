@@ -28,13 +28,22 @@ public class GridFragment extends Fragment {
 
     private GridView mGrid;
     private JokesAdapter mAdapter;
+
+    public enum ListViewMode {
+        TWO_COLUMN,
+        ONE_COLUMN
+    }
+
+
+
+    private ListViewMode mCurrentMode = ListViewMode.TWO_COLUMN;
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    enum TYPE {
+    public enum TYPE {
         MOBILE_ONLY,
         FACEBOOK_PAGE
     };
@@ -61,6 +70,11 @@ public class GridFragment extends Fragment {
 
     }
 
+    public void onTabSelected(CustomSwipeRefreshLayout refreshLayout) {
+        refreshLayout.setScrollView(mGrid);
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,12 +86,14 @@ public class GridFragment extends Fragment {
         if(getArguments().getInt(ARG_SECTION_NUMBER) == 1) {
             mGridType = TYPE.MOBILE_ONLY;
             page = getActivity().getIntent().getExtras().getParcelable(BrowserActivity.PAGE_DATA1);
+            mAdapter = new JokesAdapter(page, TYPE.MOBILE_ONLY);
         } else {
             mGridType = TYPE.FACEBOOK_PAGE;
-            page = getActivity().getIntent().getExtras().getParcelable(BrowserActivity.PAGE_DATA1);
+            page = getActivity().getIntent().getExtras().getParcelable(BrowserActivity.PAGE_DATA2);
+            mAdapter = new JokesAdapter(page, TYPE.FACEBOOK_PAGE);
         }
 
-        mAdapter = new JokesAdapter(page);
+
         mGrid = (GridView)rootView.findViewById(R.id.jokes_grid);
         mGrid.setAdapter(mAdapter);
 
@@ -116,9 +132,10 @@ public class GridFragment extends Fragment {
         else if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_view_type) {
-            int currentCOlumns = mGrid.getNumColumns();
             int currentVisible = mGrid.getFirstVisiblePosition();
-            if(currentCOlumns == 1) {
+
+            if(mCurrentMode == ListViewMode.ONE_COLUMN) {
+                mCurrentMode = ListViewMode.TWO_COLUMN;
                 item.setIcon(R.drawable.ic_action_view_as_list);
                 int paddingPx = TabbedBrowserActivity.dpToPx(8);
                 mGrid.setNumColumns(2);
@@ -126,6 +143,7 @@ public class GridFragment extends Fragment {
                 mGrid.setHorizontalSpacing(paddingPx);
                 mGrid.setPadding(paddingPx,paddingPx,paddingPx,0);
             } else {
+                mCurrentMode = ListViewMode.ONE_COLUMN;
                 item.setIcon(R.drawable.ic_action_view_as_grid);
                 int paddingPx = TabbedBrowserActivity.dpToPx(8);
                 int paddingPxTop = TabbedBrowserActivity.dpToPx(8);

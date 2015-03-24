@@ -48,7 +48,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
      */
     ViewPager mViewPager;
 
-    private SwipeRefreshLayout mSwipeLayout;
+    private CustomSwipeRefreshLayout mSwipeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         }
 
 
-        mSwipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeLayout = (CustomSwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeLayout.setOnRefreshListener(this);
         mSwipeLayout.setColorScheme(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -99,7 +99,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         mSwipeLayout.setSize(SwipeRefreshLayout.DEFAULT);
 
         ImageView header = new ImageView(this);
-        header.setImageDrawable(getResources().getDrawable(R.drawable.bolkyaresha_actionbar_image));
+        header.setImageDrawable(getResources().getDrawable(R.drawable.actionbar_banner));
         getSupportActionBar().setBackgroundDrawable(header.getDrawable());
 
         //Show me the money!
@@ -137,10 +137,15 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
+        GridFragment current = (GridFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
+        if(mSwipeLayout != null) {
+            current.onTabSelected(mSwipeLayout);
+        }
     }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
     }
 
     @Override
@@ -218,11 +223,11 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
     }
 
 
-    public SwipeRefreshLayout getSwipeLayout() {
+    public CustomSwipeRefreshLayout getSwipeLayout() {
         return mSwipeLayout;
     }
 
-    public void setSwipeLayout(SwipeRefreshLayout mSwipeLayout) {
+    public void setSwipeLayout(CustomSwipeRefreshLayout mSwipeLayout) {
         this.mSwipeLayout = mSwipeLayout;
     }
 

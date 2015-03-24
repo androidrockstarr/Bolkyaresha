@@ -51,7 +51,7 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
         final FBPage page = getIntent().getExtras().getParcelable(PAGE_DATA1);
         mJokeFragment = JokePostFragment.newInstance(page.getData().get(0));
         //pass the first page
-        mAdapter = new JokesAdapter(page);
+        mAdapter = new JokesAdapter(page, GridFragment.TYPE.FACEBOOK_PAGE);
         mGrid = (GridView)findViewById(R.id.jokes_grid);
 
         mGrid.setAdapter(mAdapter);

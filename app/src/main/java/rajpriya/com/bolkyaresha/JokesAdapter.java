@@ -43,10 +43,12 @@ public class JokesAdapter extends BaseAdapter {
     private FBPagePaging mCurrentPaging;
     private boolean isScrolling = false;
     private int lastPosition = -1;
+    private GridFragment.TYPE mSourceType;
 
-    public JokesAdapter(final FBPage firstPage) {
+    public JokesAdapter(final FBPage firstPage, GridFragment.TYPE sourceType) {
         new CleanDataTask().execute(firstPage.getData());
         mCurrentPaging = firstPage.getPaging();
+        mSourceType = sourceType;
     }
 
     public void setIsScrolling(boolean isScrolling) {
@@ -141,10 +143,20 @@ public class JokesAdapter extends BaseAdapter {
 
     private void loadNextFeeds(final Context parentActivity, final boolean firstLoad) {
         String url;
+
+        if( mCurrentPaging == null) {
+            return;
+        }
+
         if(!firstLoad) {
             url = mCurrentPaging.getNext();
         } else {
-            url = App.FB_PAGE_URL;
+            if(mSourceType == GridFragment.TYPE.FACEBOOK_PAGE) {
+                url = App.FB_PAGE_URL;
+            } else {
+                url = App.FB_APP_PAGE_URL;
+            }
+
         }
         if(TextUtils.isEmpty(url)) {
             return;
