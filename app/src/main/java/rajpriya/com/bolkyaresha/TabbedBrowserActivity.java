@@ -1,32 +1,29 @@
 package rajpriya.com.bolkyaresha;
 
-import java.util.Locale;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.groboot.pushapps.DeviceIDTypes;
+import com.groboot.pushapps.PushManager;
 
-import rajpriya.com.bolkyaresha.R;
-import rajpriya.com.bolkyaresha.models.FBPage;
+import rajpriya.com.bolkyaresha.settings.SettingsActivity;
+import rajpriya.com.bolkyaresha.settings.SettingsActivityFragment;
 
 public class TabbedBrowserActivity extends ActionBarActivity implements ActionBar.TabListener, JokesAdapter.DataLoadingListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -102,6 +99,23 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         header.setImageDrawable(getResources().getDrawable(R.drawable.actionbar_banner));
         getSupportActionBar().setBackgroundDrawable(header.getDrawable());
 
+        final SharedPreferences PREF = getSharedPreferences(SettingsActivityFragment.BOLKYARESHA_APP_FILE, 0);
+        boolean receiveNotification = PREF.getBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, false);
+        if(receiveNotification) {
+            /** optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
+             If you use this method, you must do it before your first call to init(Context,String,String), and
+             it is recommended to never change the id type after setting it for the first time
+             to avoid duplicate devices registrations.
+             http://wiki.pushapps.mobi/display/PUSHAPPS/Android+Getting+Started*/
+            PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
+            // Start PushApps and register to the push notification service (GCM)
+            PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
+            //optional - allows more than on notifications in the status bar, default is false
+            PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
+            PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
+            PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
+        }
+
         //Show me the money!
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
@@ -126,6 +140,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(TabbedBrowserActivity.this, SettingsActivity.class));
             return true;
         }
 

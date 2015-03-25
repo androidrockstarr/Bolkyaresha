@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import rajpriya.com.bolkyaresha.App;
 import rajpriya.com.bolkyaresha.R;
+import rajpriya.com.bolkyaresha.ads.FullScreenAd;
 import rajpriya.com.bolkyaresha.util.Utils;
 
 public class NotificationActivity extends ActionBarActivity {
@@ -98,16 +99,10 @@ public class NotificationActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        Utils.showFullScreenAd(this);
+        Utils.showFullScreenAd(this, FullScreenAd.NextAction.LAUNCH_HOME);
         super.onBackPressed();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_notification, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -123,7 +118,7 @@ public class NotificationActivity extends ActionBarActivity {
 
         //
         if (id == android.R.id.home) {
-            Utils.showFullScreenAd(this);
+            Utils.showFullScreenAd(this, FullScreenAd.NextAction.LAUNCH_HOME);
             return true;
         }
 

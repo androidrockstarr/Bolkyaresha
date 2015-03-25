@@ -64,8 +64,10 @@ public class Utils {
     }
 
 
-    public static void showFullScreenAd(Context context) {
-        context.startActivity(new Intent(context, FullScreenAd.class));
+    public static void showFullScreenAd(Context context, FullScreenAd.NextAction next) {
+        Intent adIntent = new Intent(context, FullScreenAd.class);
+        adIntent.putExtra(FullScreenAd.NEXT_ACTION, next);
+        context.startActivity(adIntent);
 
     }
 

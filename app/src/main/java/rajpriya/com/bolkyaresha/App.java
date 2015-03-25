@@ -1,6 +1,7 @@
 package rajpriya.com.bolkyaresha;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.util.LruCache;
@@ -15,6 +16,8 @@ import com.groboot.pushapps.DeviceIDTypes;
 import com.groboot.pushapps.PushManager;
 
 import io.fabric.sdk.android.Fabric;
+import rajpriya.com.bolkyaresha.settings.SettingsActivity;
+import rajpriya.com.bolkyaresha.settings.SettingsActivityFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -81,24 +84,10 @@ public class App extends Application{
             }
         });
 
-
-        //TODO Move pushmanager stuff to App.java and unregister when app session ends
-
-        // optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
-        //If you use this method, you must do it before your first call to init(Context,String,String), and
-        //it is recommended to never change the id type after setting it for the first time
-        //to avoid duplicate devices registrations.
-        PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
-        // Start PushApps and register to the push notification service (GCM)
-        PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
-        //optional - allows more than on notifications in the status bar, default is false
-        PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
-        PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
-        PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
-        //optional - set a your own icon for the notification, defaults is the application icon
-        //PushManager.getInstance(getApplicationContext()).setNotificationIcon(R.drawable.notification_icon);
-
-
+        final SharedPreferences PREF = getSharedPreferences(SettingsActivityFragment.BOLKYARESHA_APP_FILE, 0);
+        SharedPreferences.Editor editor = PREF.edit();
+        editor.putBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, true);
+        editor.commit();
     }
 
 

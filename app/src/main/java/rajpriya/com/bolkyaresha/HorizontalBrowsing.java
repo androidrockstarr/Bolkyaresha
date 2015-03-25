@@ -25,6 +25,7 @@ import com.google.android.gms.ads.AdView;
 
 import rajpriya.com.bolkyaresha.R;
 import rajpriya.com.bolkyaresha.models.FBPagePost;
+import rajpriya.com.bolkyaresha.util.Utils;
 
 public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFragment.OnFragmentInteractionListener{
 
@@ -73,6 +74,12 @@ public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFr
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Utils.showFullScreenAd(this, null);
+        super.onBackPressed();
     }
 
     @Override

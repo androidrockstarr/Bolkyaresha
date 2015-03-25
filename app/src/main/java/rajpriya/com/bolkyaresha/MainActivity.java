@@ -17,8 +17,6 @@ import com.groboot.pushapps.PushManager;
 
 import org.json.JSONObject;
 
-import java.util.Random;
-
 import rajpriya.com.bolkyaresha.models.FBPage;
 
 
@@ -35,6 +33,19 @@ public class MainActivity extends ActionBarActivity {
         ((ImageView)findViewById(R.id.banner)).setImageResource(bannerIds[(App.LUANCH_COUNT)%4]);
         App.LUANCH_COUNT++;
         fetchPagePosts();
+
+        /** optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
+            If you use this method, you must do it before your first call to init(Context,String,String), and
+            it is recommended to never change the id type after setting it for the first time
+            to avoid duplicate devices registrations.
+            http://wiki.pushapps.mobi/display/PUSHAPPS/Android+Getting+Started*/
+        PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
+        // Start PushApps and register to the push notification service (GCM)
+        PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
+        //optional - allows more than on notifications in the status bar, default is false
+        PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
+        PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
+        PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
 
     }
 

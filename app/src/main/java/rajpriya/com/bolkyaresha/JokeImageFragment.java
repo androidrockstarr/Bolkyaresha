@@ -134,6 +134,7 @@ public class JokeImageFragment extends Fragment {
         view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.showFullScreenAd(getActivity(), null);
                 Utils.shareImage(image, getActivity());
             }
         });

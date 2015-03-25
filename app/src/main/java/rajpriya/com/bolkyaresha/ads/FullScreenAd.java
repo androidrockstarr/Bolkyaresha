@@ -5,6 +5,7 @@ package rajpriya.com.bolkyaresha.ads;
  */
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.gms.ads.*;
 
@@ -15,10 +16,20 @@ public class FullScreenAd extends Activity {
 
     private InterstitialAd interstitial;
 
+    public enum NextAction {
+        LAUNCH_HOME
+    }
+    public static final String NEXT_ACTION = "next_activity_to_launch";
+
+    private NextAction mNextAction = NextAction.LAUNCH_HOME;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullscreen_ad);
+
+        mNextAction = getIntent().getParcelableExtra(NEXT_ACTION);
 
         // Create the interstitial.
         interstitial = new InterstitialAd(this);
@@ -32,6 +43,17 @@ public class FullScreenAd extends Activity {
 
         //track
         Utils.trackScreen(this, "FullScreenAd");
+
+        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mNextAction == NextAction.LAUNCH_HOME) {
+                    Utils.jumpToHome(FullScreenAd.this);
+                }
+                finish();
+            }
+        });
+
 
     }
 
@@ -56,7 +78,9 @@ public class FullScreenAd extends Activity {
 
     @Override
     public void onBackPressed() {
-        Utils.jumpToHome(this);
+        if(mNextAction == NextAction.LAUNCH_HOME) {
+            Utils.jumpToHome(FullScreenAd.this);
+        }
         super.onBackPressed();
     }
 

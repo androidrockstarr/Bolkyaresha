@@ -12,4 +12,6 @@
         android:title="@string/action_view_type"
         android:icon="@drawable/ic_action_view_as_list"
         app:showAsAction="always" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:icon="@android:drawable/ic_menu_preferences"/>
 </menu>
