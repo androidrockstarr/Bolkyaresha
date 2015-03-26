@@ -29,7 +29,7 @@ public class FullScreenAd extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullscreen_ad);
 
-        mNextAction = getIntent().getParcelableExtra(NEXT_ACTION);
+        mNextAction = (NextAction) getIntent().getSerializableExtra(NEXT_ACTION);
 
         // Create the interstitial.
         interstitial = new InterstitialAd(this);

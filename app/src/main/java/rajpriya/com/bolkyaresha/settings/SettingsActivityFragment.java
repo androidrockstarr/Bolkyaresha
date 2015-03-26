@@ -40,7 +40,7 @@ public class SettingsActivityFragment extends Fragment {
 
         ((TextView)view.findViewById(R.id.app_version)).setText(version);
 
-        ToggleButton notificationToggle = (ToggleButton)view.findViewById(R.id.notification);
+        /*ToggleButton notificationToggle = (ToggleButton)view.findViewById(R.id.notification);
 
         final SharedPreferences PREF = getActivity().getSharedPreferences(BOLKYARESHA_APP_FILE, 0);
         boolean receiveNotification = PREF.getBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, false);
@@ -67,7 +67,7 @@ public class SettingsActivityFragment extends Fragment {
                 editor.commit();
 
             }
-        });
+        });*/
 
         return view;
 

@@ -1,6 +1,7 @@
 package rajpriya.com.bolkyaresha;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -18,6 +19,7 @@ import com.groboot.pushapps.PushManager;
 import org.json.JSONObject;
 
 import rajpriya.com.bolkyaresha.models.FBPage;
+import rajpriya.com.bolkyaresha.settings.SettingsActivityFragment;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -34,18 +36,22 @@ public class MainActivity extends ActionBarActivity {
         App.LUANCH_COUNT++;
         fetchPagePosts();
 
-        /** optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
-            If you use this method, you must do it before your first call to init(Context,String,String), and
-            it is recommended to never change the id type after setting it for the first time
-            to avoid duplicate devices registrations.
-            http://wiki.pushapps.mobi/display/PUSHAPPS/Android+Getting+Started*/
-        PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
-        // Start PushApps and register to the push notification service (GCM)
-        PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
-        //optional - allows more than on notifications in the status bar, default is false
-        PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
-        PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
-        PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
+        final SharedPreferences PREF = getSharedPreferences(SettingsActivityFragment.BOLKYARESHA_APP_FILE, 0);
+        boolean receiveNotification = PREF.getBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, false);
+        if(receiveNotification) {
+            /** optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
+             If you use this method, you must do it before your first call to init(Context,String,String), and
+             it is recommended to never change the id type after setting it for the first time
+             to avoid duplicate devices registrations.
+             http://wiki.pushapps.mobi/display/PUSHAPPS/Android+Getting+Started*/
+            PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
+            // Start PushApps and register to the push notification service (GCM)
+            PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
+            //optional - allows more than on notifications in the status bar, default is false
+            PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
+            PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
+            PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("rajpriya.com.bolkyaresha.notifications.NotificationActivity");
+        }
 
     }
 

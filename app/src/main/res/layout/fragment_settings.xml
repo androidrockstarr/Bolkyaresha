@@ -11,28 +11,108 @@
         <RelativeLayout
             android:id="@+id/app_version_cell"
             android:layout_width="match_parent"
-            android:layout_height="78dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/white">
+
             <TextView
+                android:layout_alignParentTop="true"
+                android:id="@+id/app_version_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
                 android:textStyle="bold"
                 android:text="App version"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"/>
+
+            <include layout="@layout/include_line"
+                android:id="@+id/line1"
+                android:layout_below="@id/app_version_header"
+                android:layout_height="1dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"/>
             <TextView
                 android:id="@+id/app_version"
+                android:layout_below="@id/line1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="1.0"
-                android:layout_marginRight="14dp"
+                android:text="1.0.0"
+                android:layout_marginLeft="14dp"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:id="@+id/developer_header"
+                android:layout_below="@id/app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:text="App Developer"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+
+            <include layout="@layout/include_line"
+                android:id="@+id/line2"
+                android:layout_below="@id/developer_header"
+                android:layout_height="1dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                android:id="@+id/developer_name"
+                android:layout_below="@id/line2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rajkumar Waghmare"
+                android:layout_marginLeft="14dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+            <TextView
+                android:id="@+id/copyright_header"
+                android:layout_below="@id/developer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:text="\@Copyright / Content Developer"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
+
+            <include layout="@layout/include_line"
+                android:id="@+id/line3"
+                android:layout_below="@id/copyright_header"
+                android:layout_height="1dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"/>
+
+            <TextView
+                android:id="@+id/copyright_name"
+                android:layout_below="@id/line3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ghanshyam Deshmukh"
+                android:layout_marginLeft="14dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"/>
+
         </RelativeLayout>
 
         <RelativeLayout
+            android:visibility="gone"
             android:layout_below="@id/app_version_cell"
             android:id="@+id/notification_cell"
             android:layout_marginTop="16dp"
@@ -56,6 +136,24 @@
                 android:layout_marginRight="14dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_below="@id/app_version_cell"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            android:background="@android:color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:textStyle="bold"
+                android:text="Daily Notifications"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"/>
+
         </RelativeLayout>
 
     </RelativeLayout>
