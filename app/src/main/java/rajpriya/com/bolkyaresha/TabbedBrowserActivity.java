@@ -39,7 +39,10 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
+    int TAB0 = 0;
+    int TAB1 = 1;
 
+    private int mSelectedTab = TAB0;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -139,6 +142,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         if(mSwipeLayout != null) {
             current.onTabSelected(mSwipeLayout);
         }
+        mSelectedTab = tab.getPosition();
     }
 
     @Override
@@ -191,8 +195,11 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
 
 
         public void refresh() {
-            ((GridFragment)getItem(0)).refresh();
-            ((GridFragment)getItem(1)).refresh();
+            if(mSelectedTab == TAB0) {
+                ((GridFragment)getItem(0)).refresh();
+            } else {
+                ((GridFragment)getItem(1)).refresh();
+            }
             //notifyDataSetChanged();
         }
 

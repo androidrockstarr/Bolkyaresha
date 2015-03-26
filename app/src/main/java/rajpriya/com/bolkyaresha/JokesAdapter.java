@@ -145,6 +145,7 @@ public class JokesAdapter extends BaseAdapter {
         String url;
 
         if( mCurrentPaging == null) {
+            ((DataLoadingListener)parentActivity).onDataLoadingFinished();
             return;
         }
 
@@ -159,6 +160,7 @@ public class JokesAdapter extends BaseAdapter {
 
         }
         if(TextUtils.isEmpty(url)) {
+            ((DataLoadingListener)parentActivity).onDataLoadingFinished();
             return;
         }
 
@@ -208,8 +210,8 @@ public class JokesAdapter extends BaseAdapter {
     }
 
     public void refresh(Context caller, boolean firstLoad) {
-        mPosts.clear();
-        notifyDataSetChanged();
+        //mPosts.clear();
+        //notifyDataSetChanged();
         loadNextFeeds(caller, firstLoad);
     }
 
