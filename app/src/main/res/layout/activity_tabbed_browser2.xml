@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
+        ads:adUnitId="@string/banner_ad_unit_id_tabbed_activity">
     </com.google.android.gms.ads.AdView>
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"

@@ -19,8 +19,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 import com.polites.android.GestureImageView;
 
@@ -55,6 +57,8 @@ public class JokeImageFragment extends Fragment {
     private String objectId;
     private boolean mShowAds;
 
+    private InterstitialAd interstitial;
+
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -84,6 +88,22 @@ public class JokeImageFragment extends Fragment {
             mPost = getArguments().getParcelable(ARG_PARAM1);
             mShowAds = getArguments().getBoolean("show_top_ads_view");
         }
+        // Create the interstitial.
+        interstitial = new InterstitialAd(getActivity());
+        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
+        // Create ad request.
+        AdRequest adRequest2 = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
+        // Begin loading your interstitial.
+        if(!mShowAds) {
+            interstitial.loadAd(adRequest2);
+        }
+
+        interstitial.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                //Utils.jumpToHome(HorizontalBrowsing.this);
+            }
+        });
     }
 
     @Override
@@ -134,7 +154,10 @@ public class JokeImageFragment extends Fragment {
         view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.showFullScreenAd(getActivity(), null);
+                //Utils.showFullScreenAd(getActivity(), null);
+                if(!mShowAds){
+                    displayInterstitial();
+                }
                 Utils.shareImage(image, getActivity());
             }
         });
@@ -252,6 +275,13 @@ public class JokeImageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    // Invoke displayInterstitial() when you are ready to display an interstitial.
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
     }
 
 }

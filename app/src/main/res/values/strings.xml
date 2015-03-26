@@ -6,7 +6,7 @@
     <string name="title_section2">Comments</string>
     <string name="title_section3">Section 3</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Setting</string>
+    <string name="action_settings">About</string>
     <string name="action_view_type">View Type</string>
     <string name="action_top">Scroll To Top</string>
     <string name="facebook_app_id">668151053299134</string>
@@ -19,6 +19,10 @@
 
     <!-- TODO this is test id, replace it by your own Ad Unit ID when releasing-->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="banner_ad_unit_id_tabbed_activity">ca-app-pub-7027143152735597/1884631866</string>
+    <string name="banner_ad_unit_id_horizontal_nav">ca-app-pub-7027143152735597/3361365066</string>
+    <string name="interstitial_ad_unit_id_full_screen">ca-app-pub-7027143152735597/4838098264</string>
 
     <!--Replace with your own ad unit id. -->
     <string name="ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>

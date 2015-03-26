@@ -1,17 +1,17 @@
 package rajpriya.com.bolkyaresha.notifications;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.facebook.android.Util;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.groboot.pushapps.PushManager;
 import com.polites.android.GestureImageView;
 
@@ -20,12 +20,13 @@ import org.json.JSONObject;
 
 import rajpriya.com.bolkyaresha.App;
 import rajpriya.com.bolkyaresha.R;
-import rajpriya.com.bolkyaresha.ads.FullScreenAd;
 import rajpriya.com.bolkyaresha.util.Utils;
 
 public class NotificationActivity extends ActionBarActivity {
 
     private static final String CUSTOM_JSON_KEY = "imageUrl";
+
+    private InterstitialAd interstitial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,20 @@ public class NotificationActivity extends ActionBarActivity {
         }
 
 
+        // Create the interstitial.
+        interstitial = new InterstitialAd(this);
+        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
+        // Create ad request.
+        AdRequest adRequest2 = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
+        // Begin loading your interstitial.
+        interstitial.loadAd(adRequest2);
+
+        interstitial.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                Utils.jumpToHome(NotificationActivity.this);
+            }
+        });
 
         Utils.trackScreen(this, "NotificationActivity");
 
@@ -99,7 +114,7 @@ public class NotificationActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-        Utils.showFullScreenAd(this, FullScreenAd.NextAction.LAUNCH_HOME);
+        displayInterstitial();
         super.onBackPressed();
     }
 
@@ -118,7 +133,7 @@ public class NotificationActivity extends ActionBarActivity {
 
         //
         if (id == android.R.id.home) {
-            Utils.showFullScreenAd(this, FullScreenAd.NextAction.LAUNCH_HOME);
+            displayInterstitial();
             return true;
         }
 
@@ -126,6 +141,13 @@ public class NotificationActivity extends ActionBarActivity {
     }
 
 
+    // Invoke displayInterstitial() when you are ready to display an interstitial.
+    public void displayInterstitial() {
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+            finish();
+        }
+    }
 
 
 

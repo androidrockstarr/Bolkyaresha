@@ -33,13 +33,19 @@ public class FullScreenAd extends Activity {
 
         // Create the interstitial.
         interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(getString(R.string.ad_unit_id));
-
+        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
         // Create ad request.
-        AdRequest adRequest = new AdRequest.Builder().build();
-
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
         // Begin loading your interstitial.
         interstitial.loadAd(adRequest);
+
+        interstitial.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                Utils.jumpToHome(FullScreenAd.this);
+            }
+        });
+
 
         //track
         Utils.trackScreen(this, "FullScreenAd");
@@ -88,6 +94,7 @@ public class FullScreenAd extends Activity {
     public void displayInterstitial() {
         if (interstitial.isLoaded()) {
             interstitial.show();
+            finish();
         }
     }
 }
