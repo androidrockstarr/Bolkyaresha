@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/border"
     android:layout_height="250dp">
-    <rajpriya.com.bolkyaresha.widgets.FadeInNetworkImageView
+    <rajpriya.com.bolakyaresha.widgets.FadeInNetworkImageView
         android:id="@+id/big_joke_image"
         android:scaleType="centerCrop"
         android:layout_margin="0.5dp"

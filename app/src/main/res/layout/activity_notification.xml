@@ -4,8 +4,13 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
     android:background="@drawable/border"
-tools:context="rajpriya.com.bolkyaresha.JokeImageFragment">
-
+tools:context="rajpriya.com.bolakyaresha.JokeImageFragment">
+<TextView
+    android:text="Loading..."
+    android:gravity="center"
+    android:layout_above="@+id/banner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 <com.polites.android.GestureImageView
     android:id="@+id/big_joke_image"
     android:layout_above="@+id/banner"

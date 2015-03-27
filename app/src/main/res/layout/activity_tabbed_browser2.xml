@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<rajpriya.com.bolakyaresha.CustomSwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_container"
@@ -23,11 +23,11 @@
         android:id="@+id/pager"
         android:layout_above="@+id/adView"
         android:layout_width="match_parent" android:layout_height="match_parent"
-        tools:context="rajpriya.com.bolkyaresha.TabbedBrowserActivity" />
+        tools:context="rajpriya.com.bolakyaresha.TabbedBrowserActivity" />
 
 </RelativeLayout>
 
 
-</rajpriya.com.bolkyaresha.CustomSwipeRefreshLayout>
+</rajpriya.com.bolakyaresha.CustomSwipeRefreshLayout>
 
 

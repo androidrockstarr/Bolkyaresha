@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:background="@color/com_facebook_blue"
-    tools:context="rajpriya.com.bolkyaresha.FacebookInfoFragment">
+    tools:context="rajpriya.com.bolakyaresha.FacebookInfoFragment">
     <LinearLayout
         android:visibility="gone"
         android:layout_alignParentBottom="true"

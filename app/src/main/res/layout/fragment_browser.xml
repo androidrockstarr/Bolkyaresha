@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="rajpriya.com.bolkyaresha.JokePostFragment">
+    tools:context="rajpriya.com.bolakyaresha.JokePostFragment">
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/joke_image"

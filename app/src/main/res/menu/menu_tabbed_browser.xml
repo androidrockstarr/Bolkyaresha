@@ -1,10 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="rajpriya.com.bolkyaresha.BrowserActivity">
+    tools:context="rajpriya.com.bolakyaresha.BrowserActivity">
 
     <item android:id="@+id/action_top"
         android:title="@string/action_top"
+        android:visible="false"
         android:icon="@drawable/ic_action_upload"
         app:showAsAction="always" />
 

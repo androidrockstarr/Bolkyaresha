@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="rajpriya.com.bolkyaresha.HorizontalBowsing">
+    tools:context="rajpriya.com.bolakyaresha.HorizontalBowsing">
 
 <com.google.android.gms.ads.AdView
     android:id="@+id/adView"

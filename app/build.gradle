@@ -19,7 +19,7 @@ android {
     compileSdkVersion 21
     buildToolsVersion '21.1.1'
     defaultConfig {
-        applicationId 'rajpriya.com.bolakyareshaapp'
+        applicationId 'rajpriya.com.bolakyaresha'
         minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
