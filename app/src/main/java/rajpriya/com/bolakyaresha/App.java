@@ -14,6 +14,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import io.fabric.sdk.android.Fabric;
 import rajpriya.com.bolakyaresha.settings.SettingsActivityFragment;
+import rajpriya.com.bolakyaresha.volley.BitmapMemCache;
 
 import java.util.HashMap;
 
@@ -66,7 +67,7 @@ public class App extends Application{
         Fabric.with(this, new Crashlytics());
         mRequestQueue = Volley.newRequestQueue(this);
         mImageLoader = new ImageLoader(this.mRequestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(50);
+            private final LruCache<String, Bitmap> mCache = new BitmapMemCache();
             public void putBitmap(String url, Bitmap bitmap) {
                 mCache.put(url, bitmap);
             }
@@ -96,4 +97,9 @@ public class App extends Application{
         return mTrackers.get(trackerId);
     }
 
+    public static int getPercentageOfTotalMemory(int divider)    {
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+        final int cacheSize = maxMemory / divider;
+        return cacheSize;
+    }
 }

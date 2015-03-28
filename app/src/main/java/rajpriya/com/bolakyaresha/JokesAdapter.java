@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -33,6 +34,7 @@ public class JokesAdapter extends BaseAdapter {
     private boolean isScrolling = false;
     private int lastPosition = -1;
     private GridFragment.TYPE mSourceType;
+    JsonObjectRequest mPagePostRequest = null;
 
     public JokesAdapter(final FBPage firstPage, GridFragment.TYPE sourceType) {
         new CleanDataTask().execute(firstPage.getData());
@@ -103,6 +105,13 @@ public class JokesAdapter extends BaseAdapter {
         final FBPagePost post = mPosts.get(position);
         String url = "https://graph.facebook.com/"+ post.getObjectId() +"/picture?type=normal";
         final View finalConvertView = convertView;
+        /*if(finalConvertView.getContext() instanceof TabbedBrowserActivity) {
+            if(!((TabbedBrowserActivity)finalConvertView.getContext()).isScrolling()) {
+                holder.image.setImageUrl(url, App.getImageLoader());
+            } else {
+                holder.image.setImageUrl(null, App.getImageLoader());
+            }
+        }*/
 
         holder.image.setImageUrl(url, App.getImageLoader());
 
@@ -131,6 +140,10 @@ public class JokesAdapter extends BaseAdapter {
     }
 
     private void loadNextFeeds(final Context parentActivity, final boolean firstLoad) {
+        if(mPagePostRequest != null) {
+            return;
+        }
+
         String url;
 
         if( mCurrentPaging == null) {
@@ -158,10 +171,11 @@ public class JokesAdapter extends BaseAdapter {
 
         }
 
-        JsonObjectRequest pagePostRequest = new JsonObjectRequest(Request.Method.GET,url,null,
+        mPagePostRequest = new JsonObjectRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        mPagePostRequest = null;
                         if(parentActivity instanceof DataLoadingListener) {
                             ((DataLoadingListener)parentActivity).onDataLoadingFinished();
                         }
@@ -175,6 +189,7 @@ public class JokesAdapter extends BaseAdapter {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        mPagePostRequest = null;
                         //TODO: show network error, disable progress bar
                         if(parentActivity instanceof DataLoadingListener) {
                             ((DataLoadingListener)parentActivity).onDataLoadingFinished();
@@ -183,7 +198,7 @@ public class JokesAdapter extends BaseAdapter {
                     }
                 }
         );
-        App.getVolleyRequestQueue().add(pagePostRequest);
+        App.getVolleyRequestQueue().add(mPagePostRequest);
     }
 
 /*    private static class Holder {
@@ -200,7 +215,6 @@ public class JokesAdapter extends BaseAdapter {
 
     public void refresh(Context caller, boolean firstLoad) {
         //mPosts.clear();
-        //notifyDataSetChanged();
         loadNextFeeds(caller, firstLoad);
     }
 

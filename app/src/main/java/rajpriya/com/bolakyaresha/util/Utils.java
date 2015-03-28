@@ -1,12 +1,15 @@
 package rajpriya.com.bolakyaresha.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.IntentCompat;
 import android.view.View;
@@ -96,5 +99,23 @@ public class Utils {
                 .setAction("ButtonClick")
                 .setLabel(eventName)
                 .build());
+    }
+
+    /**
+     * Get the size in bytes of a bitmap in a BitmapDrawable.
+     * @param bitmap
+     * @return size in bytes
+     */
+    @TargetApi(12)
+    public static int getBitmapSize(Bitmap bitmap) {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= Build.VERSION_CODES.HONEYCOMB_MR1){
+            return bitmap.getByteCount();
+        } else{
+            // Pre HC-MR1
+            return bitmap.getRowBytes() * bitmap.getHeight();
+        }
+
+
     }
 }

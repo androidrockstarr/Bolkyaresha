@@ -50,6 +50,9 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
 
     MenuItem mMenuItem;
 
+
+    boolean isScrolling = false;
+
     private CustomSwipeRefreshLayout mSwipeLayout;
 
     @Override
@@ -161,6 +164,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
     @Override
     public void onScrollStateChanged(AbsListView absListView, int state) {
         if(state != SCROLL_STATE_FLING) {
+            isScrolling = false;
             if(mMenuItem == null) {
                 return;
             }
@@ -178,6 +182,8 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
             }
 
 
+        } else {
+            isScrolling = true;
         }
 
     }
@@ -269,4 +275,7 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         this.mSwipeLayout = mSwipeLayout;
     }
 
+    public boolean isScrolling() {
+        return isScrolling;
+    }
 }
