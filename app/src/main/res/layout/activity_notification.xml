@@ -4,7 +4,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
     android:background="@drawable/border"
-tools:context="rajpriya.com.bolakyaresha.JokeImageFragment">
+tools:context="com.apps.bolkyareshafree.JokeImageFragment">
 <TextView
     android:text="Loading..."
     android:gravity="center"

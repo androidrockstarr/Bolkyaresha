@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="rajpriya.com.bolakyaresha" >
+    package="com.apps.bolkyareshafree" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <permission
-        android:name="rajpriya.com.bolakyaresha.permission.C2D_MESSAGE"
+        android:name="com.apps.bolkyareshafree.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,16 +17,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="rajpriya.com.bolakyaresha.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.apps.bolkyareshafree.permission.C2D_MESSAGE" />
 
     <application
-        android:name=".App"
+        android:name="com.apps.bolkyareshafree.App"
         android:allowBackup="true"
         android:icon="@drawable/round_app_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.apps.bolkyareshafree.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -46,12 +46,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".BrowserActivity"
+            android:name="com.apps.bolkyareshafree.BrowserActivity"
             android:label=""
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".JokeDetailsActivity"
+            android:name="com.apps.bolkyareshafree.JokeDetailsActivity"
             android:label="@string/title_activity_joke_details"
             android:screenOrientation="portrait" >
         </activity>
@@ -63,7 +63,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="rajpriya.com.bolakyaresha" />
+                <category android:name="com.apps.bolkyaresha" />
             </intent-filter>
         </receiver>
 
@@ -73,7 +73,7 @@
             android:name="com.groboot.pushapps.PushActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".notifications.NotificationActivity"
+            android:name="com.apps.bolkyareshafree.notifications.NotificationActivity"
             android:label=""
             android:screenOrientation="portrait" >
         </activity>
@@ -83,29 +83,29 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".ads.FullScreenAd" />
+        <activity android:name="com.apps.bolkyareshafree.ads.FullScreenAd" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="f88243e81946f6120d684e29f8ebd408e11110c1" />
 
         <activity
-            android:name=".HorizontalBrowsing"
+            android:name="com.apps.bolkyareshafree.HorizontalBrowsing"
             android:label=""
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TabbedBrowser"
+            android:name="com.apps.bolkyareshafree.TabbedBrowser"
             android:label="@string/title_activity_tabbed_browser"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".TabbedBrowserActivity"
+            android:name="com.apps.bolkyareshafree.TabbedBrowserActivity"
             android:label=""
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="com.apps.bolkyareshafree.settings.SettingsActivity"
             android:label="" >
         </activity>
     </application>
