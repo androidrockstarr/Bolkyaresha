@@ -6,15 +6,6 @@
     android:orientation="vertical"
     tools:context="com.apps.bolkyareshafree.HorizontalBowsing">
 
-<com.google.android.gms.ads.AdView
-    android:id="@+id/adView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    ads:adSize="BANNER"
-    ads:adUnitId="@string/banner_ad_unit_id_horizontal_nav">
-</com.google.android.gms.ads.AdView>
-
 <android.support.v4.view.ViewPager
     android:id="@+id/pager"
     android:layout_width="match_parent"

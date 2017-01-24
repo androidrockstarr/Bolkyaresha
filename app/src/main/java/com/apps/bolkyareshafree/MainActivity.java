@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -33,25 +34,6 @@ public class MainActivity extends ActionBarActivity {
         ((ImageView)findViewById(R.id.banner)).setImageResource(bannerIds[(App.LUANCH_COUNT)%4]);
         App.LUANCH_COUNT++;
         fetchPagePosts();
-
-        /*final SharedPreferences PREF = getSharedPreferences(SettingsActivityFragment.BOLKYARESHA_APP_FILE, 0);
-        boolean receiveNotification = PREF.getBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, false);
-        if(receiveNotification) {*/
-            /** optional - sets the source of the device id for identification, default is DeviceIDTypes.IMEI.
-             If you use this method, you must do it before your first call to init(Context,String,String), and
-             it is recommended to never change the id type after setting it for the first time
-             to avoid duplicate devices registrations.
-             http://wiki.pushapps.mobi/display/PUSHAPPS/Android+Getting+Started*/
-            PushManager.getInstance(getApplicationContext()).setDeviceIDType(DeviceIDTypes.ANDROID_ID);
-            // Start PushApps and register to the push notification service (GCM)
-            PushManager.init(getApplicationContext(), App.GOOGLE_API_PROJECT_NUMBER, App.PUSHAPPS_APP_TOKEN);
-            //optional - allows more than on notifications in the status bar, default is false
-            PushManager.getInstance(getApplicationContext()).setShouldStackNotifications(true);
-            PushManager.getInstance(getApplicationContext()).setShouldStartIntentAsNewTask(false);
-            PushManager.getInstance(getApplicationContext()).setIntentNameToLaunch("com.apps.bolkyareshafree.notifications.NotificationActivity");
-            PushManager.getInstance(getApplicationContext()).setNotificationIcon(R.drawable.round_app_icon);
-        //}
-
     }
 
 
@@ -78,6 +60,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+    /**
+     * Fetch the FB posts sequentially, first from App.FB_APP_PAGE_URL and then from App.FB_PAGE_URL
+     * TODO: Fire these requests parallely
+     */
     private void fetchPagePosts() {
 
         JsonObjectRequest pagePostRequest = new JsonObjectRequest(Request.Method.GET, App.FB_APP_PAGE_URL, null,
@@ -115,6 +101,7 @@ public class MainActivity extends ActionBarActivity {
                     public void onErrorResponse(VolleyError error) {
                         //TODO: show network error, disable progress bar
                         Gson gson = new Gson();
+                        Toast.makeText(MainActivity.this, "Network Error. Please try again!", Toast.LENGTH_SHORT).show();
                     }
                 }
         );

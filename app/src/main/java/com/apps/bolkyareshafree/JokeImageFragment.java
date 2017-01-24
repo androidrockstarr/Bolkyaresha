@@ -15,10 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 import com.polites.android.GestureImageView;
 
@@ -47,9 +43,6 @@ public class JokeImageFragment extends Fragment {
     private String mParam2;
     private FBPagePost mPost;
     private String objectId;
-    private boolean mShowAds;
-
-    private InterstitialAd interstitial;
 
     private OnFragmentInteractionListener mListener;
 
@@ -78,24 +71,8 @@ public class JokeImageFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPost = getArguments().getParcelable(ARG_PARAM1);
-            mShowAds = getArguments().getBoolean("show_top_ads_view");
-        }
-        // Create the interstitial.
-        interstitial = new InterstitialAd(getActivity());
-        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
-        // Create ad request.
-        AdRequest adRequest2 = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
-        // Begin loading your interstitial.
-        if(!mShowAds) {
-            interstitial.loadAd(adRequest2);
         }
 
-        interstitial.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                //Utils.jumpToHome(HorizontalBrowsing.this);
-            }
-        });
     }
 
     @Override
@@ -146,85 +123,9 @@ public class JokeImageFragment extends Fragment {
         view.findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Utils.showFullScreenAd(getActivity(), null);
-                if(!mShowAds){
-                    displayInterstitial();
-                }
                 Utils.shareImage(image, getActivity());
             }
         });
-
-        String likesTotalUrl = "https://graph.facebook.com/"+ mPost.getObjectId() +"/likes/?summary=true";
-        String commentsTotalUrl = "https://graph.facebook.com/"+ mPost.getObjectId() +"/comments/?summary=true";
-
-        JsonObjectRequest totalLikesRequest = new JsonObjectRequest(Request.Method.GET,likesTotalUrl,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        String likesCount = summary.getSummary().get("total_count");
-                        if(TextUtils.isEmpty(likesCount) || TextUtils.equals(likesCount, "0")) {
-                            likes.setVisibility(View.GONE);
-                            likesText.setVisibility(View.GONE);
-                        } else {
-                            mPost.setTotalLikes(likesCount);
-                            likes.setVisibility(View.VISIBLE);
-                            likesText.setVisibility(View.VISIBLE);
-                            likes.setText("" + likesCount);
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        likes.setVisibility(View.GONE);
-                        likesText.setVisibility(View.GONE);
-                    }
-                }
-        );
-
-
-        JsonObjectRequest totalCommentsRequest = new JsonObjectRequest(Request.Method.GET,commentsTotalUrl,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        FBLikesSummary summary = gson.fromJson(response.toString(), FBLikesSummary.class);
-                        String commentsCount = summary.getSummary().get("total_count");
-                        if(TextUtils.isEmpty(commentsCount) || TextUtils.equals(commentsCount, "0")) {
-                            comments.setVisibility(View.GONE);
-                            commentsText.setVisibility(View.GONE);
-                        } else {
-                            mPost.setTotalLikes(summary.getSummary().get("total_count"));
-                            comments.setVisibility(View.VISIBLE);
-                            commentsText.setVisibility(View.VISIBLE);
-                            comments.setText("" + summary.getSummary().get("total_count"));
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        comments.setVisibility(View.GONE);
-                        commentsText.setVisibility(View.GONE);
-                    }
-                }
-        );
-
-        App.getVolleyRequestQueue().add(totalLikesRequest);
-        App.getVolleyRequestQueue().add(totalCommentsRequest);
-
-        AdView mAdView = (AdView) view.findViewById(R.id.adView);
-        if(mShowAds) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        } else {
-            mAdView.setVisibility(View.GONE);
-        }
-
 
 
         return view;
@@ -267,13 +168,6 @@ public class JokeImageFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
-    }
-
-    // Invoke displayInterstitial() when you are ready to display an interstitial.
-    public void displayInterstitial() {
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-        }
     }
 
 }

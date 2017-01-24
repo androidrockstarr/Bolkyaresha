@@ -9,11 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,8 +31,6 @@ public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFr
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-
-    private InterstitialAd interstitial;
 
     private ArrayList<FBPagePost> mPosts = new ArrayList<FBPagePost>();
 
@@ -60,24 +54,7 @@ public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFr
 
         mViewPager.setCurrentItem(lastSelectedPosition);
 
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
-        mAdView.loadAd(adRequest);
-
-        // Create the interstitial.
-        interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
-        // Create ad request.
-        AdRequest adRequest2 = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
-        // Begin loading your interstitial.
-        interstitial.loadAd(adRequest2);
-
-        interstitial.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                //Utils.jumpToHome(HorizontalBrowsing.this);
-            }
-        });
+        Toast.makeText(this, "You can swipe Left or Right to browse more", Toast.LENGTH_LONG).show();
 
     }
 
@@ -88,18 +65,9 @@ public class HorizontalBrowsing extends ActionBarActivity implements JokeImageFr
 
     @Override
     public void onBackPressed() {
-        //Utils.showFullScreenAd(this, null);
-        displayInterstitial();
         super.onBackPressed();
     }
 
-    // Invoke displayInterstitial() when you are ready to display an interstitial.
-    public void displayInterstitial() {
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-            finish();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

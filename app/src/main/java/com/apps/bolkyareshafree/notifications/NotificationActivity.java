@@ -10,9 +10,6 @@ import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.groboot.pushapps.PushManager;
 import com.polites.android.GestureImageView;
 
@@ -26,8 +23,6 @@ import com.apps.bolkyareshafree.util.Utils;
 public class NotificationActivity extends ActionBarActivity {
 
     private static final String CUSTOM_JSON_KEY = "imageUrl";
-
-    private InterstitialAd interstitial;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +77,6 @@ public class NotificationActivity extends ActionBarActivity {
                              @Override
                              public void onClick(View v) {
                                  Utils.shareImage(image, NotificationActivity.this);
-                                 Utils.trackEvent(NotificationActivity.this, "Share");
                              }
                          });
 
@@ -93,30 +87,6 @@ public class NotificationActivity extends ActionBarActivity {
             }
         }
 
-
-        // Create the interstitial.
-        interstitial = new InterstitialAd(this);
-        interstitial.setAdUnitId(getString(R.string.interstitial_ad_unit_id_full_screen));
-        // Create ad request.
-        AdRequest adRequest2 = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
-        // Begin loading your interstitial.
-        interstitial.loadAd(adRequest2);
-
-        interstitial.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                Utils.jumpToHome(NotificationActivity.this);
-            }
-        });
-
-        Utils.trackScreen(this, "NotificationActivity");
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        displayInterstitial();
-        super.onBackPressed();
     }
 
     @Override
@@ -140,12 +110,10 @@ public class NotificationActivity extends ActionBarActivity {
 
         //
         if (id == android.R.id.home) {
-            displayInterstitial();
             return true;
         }
 
         if (id == R.id.action_close) {
-            displayInterstitial();
             if(!isFinishing()) {
                 finish();
             }
@@ -154,16 +122,5 @@ public class NotificationActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-    // Invoke displayInterstitial() when you are ready to display an interstitial.
-    public void displayInterstitial() {
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-            finish();
-        }
-    }
-
-
 
 }

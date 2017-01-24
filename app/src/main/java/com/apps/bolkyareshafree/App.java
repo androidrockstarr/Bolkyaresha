@@ -9,8 +9,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 
 import io.fabric.sdk.android.Fabric;
 import com.apps.bolkyareshafree.settings.SettingsActivityFragment;
@@ -58,9 +56,6 @@ public class App extends Application{
         //ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 
-    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -80,21 +75,6 @@ public class App extends Application{
         SharedPreferences.Editor editor = PREF.edit();
         editor.putBoolean(SettingsActivityFragment.RECEIVE_NOTIFICATIONS_KEY, true);
         editor.commit();
-    }
-
-
-
-    public synchronized Tracker getTracker(TrackerName trackerId) {
-        if (!mTrackers.containsKey(trackerId)) {
-
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            Tracker t = analytics.newTracker(R.xml.global_tracker);
-
-
-            mTrackers.put(trackerId, t);
-
-        }
-        return mTrackers.get(trackerId);
     }
 
     public static int getPercentageOfTotalMemory(int divider)    {

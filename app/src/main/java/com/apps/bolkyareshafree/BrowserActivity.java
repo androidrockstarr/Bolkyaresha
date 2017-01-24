@@ -11,9 +11,6 @@ import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import com.apps.bolkyareshafree.models.FBPage;
 
 
@@ -79,11 +76,6 @@ public class BrowserActivity extends ActionBarActivity implements JokesAdapter.D
         ImageView header = new ImageView(this);
         header.setImageDrawable(getResources().getDrawable(R.drawable.bolkyaresha_actionbar_image));
         getSupportActionBar().setBackgroundDrawable(header.getDrawable());
-
-        //Show me the money!
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
 
     }
 

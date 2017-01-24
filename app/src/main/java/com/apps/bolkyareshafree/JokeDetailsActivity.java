@@ -52,8 +52,6 @@ public class JokeDetailsActivity extends ActionBarActivity implements JokeImageF
         mViewPager.setAdapter(mSectionsPagerAdapter);
         getSupportActionBar().hide();
 
-        Utils.trackScreen(this, "JokeDetailsActivity");
-
     }
 
 

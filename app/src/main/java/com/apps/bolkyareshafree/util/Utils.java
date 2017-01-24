@@ -13,14 +13,9 @@ import android.provider.MediaStore;
 import android.support.v4.content.IntentCompat;
 import android.view.View;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.io.OutputStream;
 
-import com.apps.bolkyareshafree.App;
 import com.apps.bolkyareshafree.MainActivity;
-import com.apps.bolkyareshafree.ads.FullScreenAd;
 
 /**
  * Created by rajkumar on 3/10/15.
@@ -68,36 +63,6 @@ public class Utils {
         share.putExtra(Intent.EXTRA_STREAM, uri);
         context.startActivity(Intent.createChooser(share,"Share"));
 
-    }
-
-
-    public static void showFullScreenAd(Context context, FullScreenAd.NextAction next) {
-        Intent adIntent = new Intent(context, FullScreenAd.class);
-        adIntent.putExtra(FullScreenAd.NEXT_ACTION, next);
-        context.startActivity(adIntent);
-
-    }
-
-    public static void trackScreen(Activity context, String screenName) {
-        // Get tracker.
-        Tracker t = ((App)context.getApplication()).getTracker(App.TrackerName.GLOBAL_TRACKER);
-        // Set screen name.
-        t.setScreenName(screenName);
-        // Send a screen view.
-        t.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-
-    public static void trackEvent(Activity context, String eventName) {
-        // Get tracker.
-        Tracker t = ((App) context.getApplication()).getTracker(
-                App.TrackerName.GLOBAL_TRACKER);
-        // Build and send an Event.
-        t.send(new HitBuilders.EventBuilder()
-                .setCategory("Events")
-                .setAction("ButtonClick")
-                .setLabel(eventName)
-                .build());
     }
 
     /**

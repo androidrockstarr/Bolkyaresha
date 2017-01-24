@@ -17,9 +17,6 @@ import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import com.apps.bolkyareshafree.settings.SettingsActivity;
 
 public class TabbedBrowserActivity extends ActionBarActivity implements ActionBar.TabListener,
@@ -107,11 +104,6 @@ public class TabbedBrowserActivity extends ActionBarActivity implements ActionBa
         ImageView header = new ImageView(this);
         header.setImageDrawable(getResources().getDrawable(R.drawable.actionbar_banner));
         getSupportActionBar().setBackgroundDrawable(header.getDrawable());
-
-        //Show me the money!
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice("2B5FCE7F5371A6FE3457055EA04FDA8E").build();
-        mAdView.loadAd(adRequest);
 
     }
 
